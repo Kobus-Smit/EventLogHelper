@@ -3,7 +3,7 @@ program MyTestApp;
 uses
   Forms,
   FormMain in 'Forms\FormMain.pas' {MainForm},
-  EventLog in 'Units\EventLog.pas';
+  EventLog in '..\..\EventLog.pas';
 
 {$R *.res}
 {$R MessageFile\MessageFile.res}

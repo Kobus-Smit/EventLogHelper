@@ -60,7 +60,7 @@
         <DCCReference Include="Forms\FormMain.pas">
             <Form>MainForm</Form>
         </DCCReference>
-        <DCCReference Include="Units\EventLog.pas"/>
+        <DCCReference Include="..\..\EventLog.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>
