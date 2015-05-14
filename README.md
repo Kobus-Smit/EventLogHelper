@@ -17,10 +17,10 @@ begin
 end;
 ```
 
-Also includes a ready to use [message file](https://github.com/Kobus-Smit/EventLogHelper/blob/master/Source/MessageFile/MessageFile.res)    [(More info)](https://msdn.microsoft.com/en-us/library/aa363669(v=vs.85).aspx)
+Also includes a ready to use [message file](https://github.com/Kobus-Smit/EventLogHelper/blob/master/Test%20app/Source/MessageFile/MessageFile.res)    [(More info)](https://msdn.microsoft.com/en-us/library/aa363669(v=vs.85).aspx)
 
 
-and a [procedure to register your event source](https://github.com/Kobus-Smit/EventLogHelper/blob/master/Source/Units/EventLog.pas#L54)    [(More info)](https://msdn.microsoft.com/en-us/library/aa363634(VS.85).aspx)
+and a [procedure to register your event source](https://github.com/Kobus-Smit/EventLogHelper/blob/master/EventLog.pas#L54)    [(More info)](https://msdn.microsoft.com/en-us/library/aa363634(VS.85).aspx)
 
 
 ```
