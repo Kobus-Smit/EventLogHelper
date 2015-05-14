@@ -1,9 +1,11 @@
 unit FormMain;
 
+{$IF CompilerVersion >= 28} {$DEFINE DELPHI_XE7_AND_UP} {$ENDIF}
+
 interface
 
 uses
-  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls;
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, Vcl.Samples.Spin;
 
 type
   TMainForm = class(TForm)
@@ -12,9 +14,14 @@ type
     Label1: TLabel;
     Memo: TMemo;
     Label2: TLabel;
+    TimeTestButton: TButton;
+    Label3: TLabel;
+    IterationsCountEdit: TSpinEdit;
+    Label4: TLabel;
     procedure WriteToEventLogButtonClick(Sender: TObject);
     procedure RegisterEventSourceButtonClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
+    procedure TimeTestButtonClick(Sender: TObject);
   private
   public
   end;
@@ -26,17 +33,87 @@ implementation
 {$R *.dfm}
 
 uses
-  EventLog, Registry;
+  EventLog, Registry, System.Diagnostics, EventLogTest, EventLogOld
+  {$IFDEF DELPHI_XE7_AND_UP}, System.Threading{$ENDIF};
+
+procedure TMainForm.TimeTestButtonClick(Sender: TObject);
+var
+  i: Integer;
+  sw: TStopWatch;
+  eventLog2: TEventLogTest;
+begin
+  Memo.Lines.Add('Starting...');
+
+  sw := TStopwatch.Create;
+  sw.Start;
+  for i := 1 to IterationsCountEdit.Value do
+  begin
+    TEventLogOld.WriteInfo('Test');
+  end;
+  sw.Stop;
+  Memo.Lines.Add(IterationsCountEdit.Value.ToString+'x TEventLogOld.WriteInfo: ' + sw.ElapsedMilliseconds.ToString + ' ms ' + sw.ElapsedTicks.ToString + ' ticks');
+
+  sw := sw.StartNew;
+  eventLog2 := TEventLogTest.Create('My Test App Name');
+  for i := 1 to IterationsCountEdit.Value do
+  begin
+    eventLog2.WriteInfo('Test');
+  end;
+  eventLog2.Free;
+  sw.Stop;
+  Memo.Lines.Add(IterationsCountEdit.Value.ToString+'x TEventLog2.WriteInfo: ' + sw.ElapsedMilliseconds.ToString + ' ms ' + sw.ElapsedTicks.ToString + ' ticks');
+
+  sw := sw.StartNew;
+  for i := 1 to IterationsCountEdit.Value do
+  begin
+    TEventLog.WriteInfo('Test');
+  end;
+  sw.Stop;
+  Memo.Lines.Add(IterationsCountEdit.Value.ToString+'x TEventLog.WriteInfo: ' + sw.ElapsedMilliseconds.ToString + ' ms ' + sw.ElapsedTicks.ToString + ' ticks');
+
+  Memo.Lines.Add('');
+
+ {$IFDEF DELPHI_XE7_AND_UP}
+  sw := TStopwatch.Create;
+  sw.Start;
+  TParallel.For(1, IterationsCountEdit.Value, procedure (I: Integer)
+  begin
+    TEventLogOld.WriteInfo('Test');
+  end);
+  sw.Stop;
+  Memo.Lines.Add(IterationsCountEdit.Value.ToString+'x Parallel TEventLogOld.WriteInfo: ' + sw.ElapsedMilliseconds.ToString + ' ms ' + sw.ElapsedTicks.ToString + ' ticks');
+
+  sw := sw.StartNew;
+  eventLog2 := TEventLogTest.Create('My Test App Name');
+  TParallel.For(1, IterationsCountEdit.Value, procedure (I: Integer)
+  begin
+    eventLog2.WriteInfo('Test');
+  end);
+  eventLog2.Free;
+  sw.Stop;
+  Memo.Lines.Add(IterationsCountEdit.Value.ToString+'x Parallel TEventLog2.WriteInfo: ' + sw.ElapsedMilliseconds.ToString + ' ms ' + sw.ElapsedTicks.ToString + ' ticks');
+
+  sw := sw.StartNew;
+  TParallel.For(1, IterationsCountEdit.Value, procedure (I: Integer)
+  begin
+    TEventLog.WriteInfo('Test');
+  end);
+  sw.Stop;
+  Memo.Lines.Add(IterationsCountEdit.Value.ToString+'x Parallel TEventLog.WriteInfo: ' + sw.ElapsedMilliseconds.ToString + ' ms ' + sw.ElapsedTicks.ToString + ' ticks');
+
+{$ENDIF};
+  Memo.Lines.Add('Done.');
+end;
 
 procedure TMainForm.FormCreate(Sender: TObject);
 begin
-  TEventLog.Source := 'My Test App Name';
+  TEventLogOld.Source := 'My Test App Name';
 end;
 
 procedure TMainForm.RegisterEventSourceButtonClick(Sender: TObject);
 begin
   try
-    TEventLog.AddEventSourceToRegistry;
+    TEventLogOld.AddEventSourceToRegistry;
     Memo.Lines.Add('Registration succeeded.');
   except
     on E: Exception do
@@ -49,9 +126,9 @@ end;
 
 procedure TMainForm.WriteToEventLogButtonClick(Sender: TObject);
 begin
-  TEventLog.WriteInfo('This is information.');
-  TEventLog.WriteWarning('This is a warning.');
-  TEventLog.WriteError('This is an error.');
+  TEventLogOld.WriteInfo('This is information.');
+  TEventLogOld.WriteWarning('This is a warning.');
+  TEventLogOld.WriteError('This is an error.');
   Memo.Lines.Add('Test messages were written to the Windows Event Log.');
 end;
 

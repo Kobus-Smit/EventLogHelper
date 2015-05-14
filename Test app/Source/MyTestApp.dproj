@@ -5,7 +5,7 @@
         <FrameworkType>VCL</FrameworkType>
         <MainSource>MyTestApp.dpr</MainSource>
         <Base>True</Base>
-        <Config Condition="'$(Config)'==''">Debug</Config>
+        <Config Condition="'$(Config)'==''">Release</Config>
         <Platform Condition="'$(Platform)'==''">Win32</Platform>
         <TargetedPlatforms>1</TargetedPlatforms>
         <AppType>Application</AppType>
@@ -60,6 +60,8 @@
         <DCCReference Include="Forms\FormMain.pas">
             <Form>MainForm</Form>
         </DCCReference>
+        <DCCReference Include="Units\EventLogOld.pas"/>
+        <DCCReference Include="Units\EventLogTest.pas"/>
         <DCCReference Include="..\..\EventLog.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
@@ -116,6 +118,18 @@
             </Delphi.Personality>
             <Deployment>
                 <DeployFile LocalName="Win32\Debug\MyTestApp.exe" Configuration="Debug" Class="ProjectOutput">
+                    <Platform Name="Win32">
+                        <RemoteName>MyTestApp.exe</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="..\Bin\Win32\Debug\MyTestApp.rsm" Configuration="Debug" Class="DebugSymbols">
+                    <Platform Name="Win32">
+                        <RemoteName>MyTestApp.rsm</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="..\Bin\Win32\Debug\MyTestApp.exe" Configuration="Debug" Class="ProjectOutput">
                     <Platform Name="Win32">
                         <RemoteName>MyTestApp.exe</RemoteName>
                         <Overwrite>true</Overwrite>
