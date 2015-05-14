@@ -40,7 +40,7 @@ procedure TMainForm.TimeTestButtonClick(Sender: TObject);
 var
   i: Integer;
   sw: TStopWatch;
-  eventLog2: TEventLogTest;
+  eventLogTest: TEventLogTest;
 begin
   Memo.Lines.Add('Starting...');
 
@@ -54,14 +54,14 @@ begin
   Memo.Lines.Add(IterationsCountEdit.Value.ToString+'x TEventLogOld.WriteInfo: ' + sw.ElapsedMilliseconds.ToString + ' ms ' + sw.ElapsedTicks.ToString + ' ticks');
 
   sw := sw.StartNew;
-  eventLog2 := TEventLogTest.Create('My Test App Name');
+  eventLogTest := TEventLogTest.Create('My Test App Name');
   for i := 1 to IterationsCountEdit.Value do
   begin
-    eventLog2.WriteInfo('Test');
+    eventLogTest.WriteInfo('Test');
   end;
-  eventLog2.Free;
+  eventLogTest.Free;
   sw.Stop;
-  Memo.Lines.Add(IterationsCountEdit.Value.ToString+'x TEventLog2.WriteInfo: ' + sw.ElapsedMilliseconds.ToString + ' ms ' + sw.ElapsedTicks.ToString + ' ticks');
+  Memo.Lines.Add(IterationsCountEdit.Value.ToString+'x TEventLogTest.WriteInfo: ' + sw.ElapsedMilliseconds.ToString + ' ms ' + sw.ElapsedTicks.ToString + ' ticks');
 
   sw := sw.StartNew;
   for i := 1 to IterationsCountEdit.Value do
@@ -84,14 +84,14 @@ begin
   Memo.Lines.Add(IterationsCountEdit.Value.ToString+'x Parallel TEventLogOld.WriteInfo: ' + sw.ElapsedMilliseconds.ToString + ' ms ' + sw.ElapsedTicks.ToString + ' ticks');
 
   sw := sw.StartNew;
-  eventLog2 := TEventLogTest.Create('My Test App Name');
+  eventLogTest := TEventLogTest.Create('My Test App Name');
   TParallel.For(1, IterationsCountEdit.Value, procedure (I: Integer)
   begin
-    eventLog2.WriteInfo('Test');
+    eventLogTest.WriteInfo('Test');
   end);
-  eventLog2.Free;
+  eventLogTest.Free;
   sw.Stop;
-  Memo.Lines.Add(IterationsCountEdit.Value.ToString+'x Parallel TEventLog2.WriteInfo: ' + sw.ElapsedMilliseconds.ToString + ' ms ' + sw.ElapsedTicks.ToString + ' ticks');
+  Memo.Lines.Add(IterationsCountEdit.Value.ToString+'x Parallel TEventLogTest.WriteInfo: ' + sw.ElapsedMilliseconds.ToString + ' ms ' + sw.ElapsedTicks.ToString + ' ticks');
 
   sw := sw.StartNew;
   TParallel.For(1, IterationsCountEdit.Value, procedure (I: Integer)
