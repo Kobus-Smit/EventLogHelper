@@ -1,11 +1,11 @@
 unit FormMain;
 
-{$IF CompilerVersion >= 28} {$DEFINE DELPHI_XE7_AND_UP} {$ENDIF}
+{$IF CompilerVersion >= 28} {$DEFINE DELPHI_XE7_AND_UP} {$IFEND}
 
 interface
 
 uses
-  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, Vcl.Samples.Spin;
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, Spin;
 
 type
   TMainForm = class(TForm)
@@ -33,7 +33,7 @@ implementation
 {$R *.dfm}
 
 uses
-  EventLog, Registry, System.Diagnostics, EventLogTest, EventLogOld
+  EventLog, Registry, Diagnostics, EventLogTest, EventLogOld
   {$IFDEF DELPHI_XE7_AND_UP}, System.Threading{$ENDIF};
 
 procedure TMainForm.TimeTestButtonClick(Sender: TObject);
@@ -51,7 +51,7 @@ begin
     TEventLogOld.WriteInfo('Test');
   end;
   sw.Stop;
-  Memo.Lines.Add(IterationsCountEdit.Value.ToString+'x TEventLogOld.WriteInfo: ' + sw.ElapsedMilliseconds.ToString + ' ms ' + sw.ElapsedTicks.ToString + ' ticks');
+  Memo.Lines.Add(IntToStr(IterationsCountEdit.Value)+'x TEventLogOld.WriteInfo: ' + IntToStr(sw.ElapsedMilliseconds) + ' ms ' + IntToStr(sw.ElapsedTicks) + ' ticks');
 
   sw := sw.StartNew;
   eventLogTest := TEventLogTest.Create('My Test App Name');
@@ -61,7 +61,7 @@ begin
   end;
   eventLogTest.Free;
   sw.Stop;
-  Memo.Lines.Add(IterationsCountEdit.Value.ToString+'x TEventLogTest.WriteInfo: ' + sw.ElapsedMilliseconds.ToString + ' ms ' + sw.ElapsedTicks.ToString + ' ticks');
+  Memo.Lines.Add(IntToStr(IterationsCountEdit.Value)+'x TEventLogTest.WriteInfo: ' + IntToStr(sw.ElapsedMilliseconds) + ' ms ' + IntToStr(sw.ElapsedTicks) + ' ticks');
 
   sw := sw.StartNew;
   for i := 1 to IterationsCountEdit.Value do
@@ -69,7 +69,7 @@ begin
     TEventLog.WriteInfo('Test');
   end;
   sw.Stop;
-  Memo.Lines.Add(IterationsCountEdit.Value.ToString+'x TEventLog.WriteInfo: ' + sw.ElapsedMilliseconds.ToString + ' ms ' + sw.ElapsedTicks.ToString + ' ticks');
+  Memo.Lines.Add(IntToStr(IterationsCountEdit.Value)+'x TEventLog.WriteInfo: ' + IntToStr(sw.ElapsedMilliseconds) + ' ms ' + IntToStr(sw.ElapsedTicks) + ' ticks');
 
   Memo.Lines.Add('');
 
